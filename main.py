@@ -17,7 +17,8 @@ def extract(page):
 
 
 def transform(soup):
-    divs = soup.find_all('div', class_='job_seen_beacon')  # open up the page,pass thorugh and find instances div is is this
+    divs = soup.find_all('a', {'class': 'tapItem'})  # open up the page,pass thorugh and find instances div is is this
+    print(len(divs))
     # loop through each div, and get its respective information
     for item in divs:
         title = item.find('span').text.strip()
@@ -26,16 +27,17 @@ def transform(soup):
         #     continue
         company = item.find('span', class_='companyName').text.strip()  # strip, removes whitespaces
         summary = item.find('div', {'class': 'job-snippet'}).text.strip().replace('\n', '')
+        link = 'https://ie.indeed.com' + item.get('href')
 
         job = {
             'TITLE': title,
             'COMPANY': company,
-            'SUMMARY': summary
+            'SUMMARY': summary,
+            'LINK': link
         }
         joblist.append(job)
     return
     # print(f'{title}: {company}')
-
 
 joblist = []
 
